@@ -1,16 +1,18 @@
 // App.tsx
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./HomePage/Sidebar";
-import Header from "./HomePage/Header";
+import Sidebar from "./Sidebar/Sidebar";
+import Header from "./Header/Header";
 import Dashboard from "./HomePage/HomePage";
 import LoginPage from "./LoginPage/LoginPage";
 import PrivateRoute from "./PrivateRoute";
-import SampleTable from "./SampleTable.tsx/SampleTable";
+import SampleTable from "./PatientTable/PatientDetail";
+import { addPatientAction } from "./Redux-Toolkit/Action";
+import { useDispatch } from "react-redux";
 
 const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+  const dispatch = useDispatch();
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -23,6 +25,10 @@ const App: React.FC = () => {
     </>
   );
 
+  const handleAddPatient = (formData: any) => {
+    dispatch(addPatientAction(formData));
+  };
+
   return (
     <Router>
       <Routes>
@@ -30,7 +36,11 @@ const App: React.FC = () => {
         <Route path="/app" element={<PrivateRoute element={<MainApp />} />} />
         <Route
           path="/patient-list"
-          element={<PrivateRoute element={<SampleTable />} />}
+          element={
+            <PrivateRoute
+              element={<SampleTable onAddPatient={handleAddPatient} />}
+            />
+          }
         />
       </Routes>
     </Router>
