@@ -6,7 +6,8 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url("../Assets/wallpaper.jpg");
+  width: 100vw;
+  background-image: url("./wallpaper.jpg");
   background-size: cover;
 `;
 

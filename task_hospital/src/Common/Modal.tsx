@@ -59,12 +59,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   return (
     <ModalOverlay>
       <ModalContent>
-        <ModalHeader>
-          {/* <h2>New Patient</h2>
-          <button onClick={onClose} style={{ fontSize: "20px" }}>
-            &times;
-          </button> */}
-        </ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </ModalOverlay>

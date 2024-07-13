@@ -20,6 +20,7 @@ import {
   ButtonGroup,
   SubmitButton,
   CancelButton,
+  ErrorText,
 } from "./PatientTableStyle";
 import Modal from "../Common/Modal";
 
@@ -30,7 +31,6 @@ interface SampleTableProps {
 const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
   const dispatch = useDispatch();
   const patients = useSelector((state: RootState) => state.patients.patients);
-  console.log("patients==>", patients);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -43,6 +43,14 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
   const [assignedTo, setAssignedTo] = useState("");
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState({
+    clientName: "",
+    jobType: "",
+    applicationDate: "",
+    assignedTo: "",
+    status: "",
+    file: "",
+  });
 
   const openEditModal = (patient: Patient) => {
     setSelectedPatient(patient);
@@ -62,20 +70,60 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
     setAssignedTo("");
     setStatus("");
     setFile(null);
+    setErrors({
+      clientName: "",
+      jobType: "",
+      applicationDate: "",
+      assignedTo: "",
+      status: "",
+      file: "",
+    });
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {
+      clientName: "",
+      jobType: "",
+      applicationDate: "",
+      assignedTo: "",
+      status: "",
+      file: "",
+    };
+
+    if (!clientName) {
+      newErrors.clientName = "Client Name is required";
+      valid = false;
+    }
+    if (!jobType) {
+      newErrors.jobType = "Job Type is required";
+      valid = false;
+    }
+    if (!applicationDate) {
+      newErrors.applicationDate = "Application Date is required";
+      valid = false;
+    }
+    if (!assignedTo) {
+      newErrors.assignedTo = "Assigned To is required";
+      valid = false;
+    }
+    if (!status) {
+      newErrors.status = "Status is required";
+      valid = false;
+    }
+    if (!file) {
+      newErrors.file = "File is required";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      !clientName ||
-      !jobType ||
-      !applicationDate ||
-      !assignedTo ||
-      !status ||
-      !file
-    ) {
-      alert("Please fill in all fields.");
+    if (!validateForm()) {
       return;
     }
 
@@ -182,6 +230,7 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
               />
+              {errors.clientName && <ErrorText>{errors.clientName}</ErrorText>}
             </FormGroup>
             <FormGroup>
               <Label>Job Type</Label>
@@ -190,6 +239,7 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 value={jobType}
                 onChange={(e) => setJobType(e.target.value)}
               />
+              {errors.jobType && <ErrorText>{errors.jobType}</ErrorText>}
             </FormGroup>
             <FormGroup>
               <Label>Application Date</Label>
@@ -198,6 +248,9 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 value={applicationDate}
                 onChange={(e) => setApplicationDate(e.target.value)}
               />
+              {errors.applicationDate && (
+                <ErrorText>{errors.applicationDate}</ErrorText>
+              )}
             </FormGroup>
             <FormGroup>
               <Label>Assigned To</Label>
@@ -206,6 +259,7 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 value={assignedTo}
                 onChange={(e) => setAssignedTo(e.target.value)}
               />
+              {errors.assignedTo && <ErrorText>{errors.assignedTo}</ErrorText>}
             </FormGroup>
             <FormGroup>
               <Label>Status</Label>
@@ -214,10 +268,12 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               />
+              {errors.status && <ErrorText>{errors.status}</ErrorText>}
             </FormGroup>
             <FormGroup>
               <Label>File</Label>
               <Input type="file" onChange={handleFileChange} />
+              {errors.file && <ErrorText>{errors.file}</ErrorText>}
             </FormGroup>
             <ButtonGroup>
               <SubmitButton type="submit">Submit</SubmitButton>

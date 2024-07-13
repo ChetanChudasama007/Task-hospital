@@ -59,3 +59,21 @@ export const IconWithDropdown = styled.div`
     font-size: 15px;
   }
 `;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 90px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  width: 100%;
+`;
+
+export const DropdownMenuItem = styled.div`
+  padding: 10px;
+  cursor: pointer;
+  color: black;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;

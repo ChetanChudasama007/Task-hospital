@@ -18,6 +18,7 @@ import {
   FormButton,
   ModalContent,
   ModalButton,
+  ErrorText,
 } from "./HomePageStyle";
 
 interface DashboardProps {
@@ -34,26 +35,48 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
+  // State for validation errors
+  const [errors, setErrors] = useState({
+    clientName: "",
+    jobType: "",
+    applicationDate: "",
+    assignedTo: "",
+    status: "",
+    file: "",
+  });
+
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    // Clear form and errors on modal close
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setClientName("");
+    setJobType("");
+    setApplicationDate("");
+    setAssignedTo("");
+    setStatus("");
+    setFile(null);
+    setErrors({
+      clientName: "",
+      jobType: "",
+      applicationDate: "",
+      assignedTo: "",
+      status: "",
+      file: "",
+    });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      !clientName ||
-      !jobType ||
-      !applicationDate ||
-      !assignedTo ||
-      !status ||
-      !file
-    ) {
-      alert("Please fill in all fields.");
+    // Validate form fields
+    if (!validateForm()) {
       return;
     }
 
@@ -68,13 +91,49 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
 
     dispatch(addPatientAction(formData));
 
-    setClientName("");
-    setJobType("");
-    setApplicationDate("");
-    setAssignedTo("");
-    setStatus("");
-    setFile(null);
+    // Clear form and close modal
+    resetForm();
     setIsModalOpen(false);
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {
+      clientName: "",
+      jobType: "",
+      applicationDate: "",
+      assignedTo: "",
+      status: "",
+      file: "",
+    };
+
+    if (!clientName) {
+      newErrors.clientName = "Client Name is required";
+      valid = false;
+    }
+    if (!jobType) {
+      newErrors.jobType = "Job Type is required";
+      valid = false;
+    }
+    if (!applicationDate) {
+      newErrors.applicationDate = "Application Date is required";
+      valid = false;
+    }
+    if (!assignedTo) {
+      newErrors.assignedTo = "Assigned To is required";
+      valid = false;
+    }
+    if (!status) {
+      newErrors.status = "Status is required";
+      valid = false;
+    }
+    if (!file) {
+      newErrors.file = "File is required";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,6 +167,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
             />
+            {errors.clientName && <ErrorText>{errors.clientName}</ErrorText>}
           </FormField>
           <FormField>
             <FormLabel>Job Type</FormLabel>
@@ -116,6 +176,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
               value={jobType}
               onChange={(e) => setJobType(e.target.value)}
             />
+            {errors.jobType && <ErrorText>{errors.jobType}</ErrorText>}
           </FormField>
           <FormField>
             <FormLabel>Application Date</FormLabel>
@@ -124,6 +185,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
               value={applicationDate}
               onChange={(e) => setApplicationDate(e.target.value)}
             />
+            {errors.applicationDate && (
+              <ErrorText>{errors.applicationDate}</ErrorText>
+            )}
           </FormField>
           <FormField>
             <FormLabel>Assigned To</FormLabel>
@@ -132,6 +196,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
               value={assignedTo}
               onChange={(e) => setAssignedTo(e.target.value)}
             />
+            {errors.assignedTo && <ErrorText>{errors.assignedTo}</ErrorText>}
           </FormField>
           <FormField>
             <FormLabel>Status</FormLabel>
@@ -140,10 +205,12 @@ const Dashboard: React.FC<DashboardProps> = ({ isSidebarOpen }) => {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             />
+            {errors.status && <ErrorText>{errors.status}</ErrorText>}
           </FormField>
           <FormField>
             <FormLabel>File</FormLabel>
             <FormFileInput type="file" onChange={handleFileChange} />
+            <div>{errors.file && <ErrorText>{errors.file}</ErrorText>}</div>
           </FormField>
           <ModalContent>
             <FormButton type="submit">Submit</FormButton>

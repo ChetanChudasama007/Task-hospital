@@ -53,3 +53,10 @@ export const CancelButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
 `;
+
+export const ErrorText = styled.span`
+  color: red;
+  font-size: 15px;
+  margin-top: 3px;
+  font-weight: 500;
+`;
