@@ -132,7 +132,13 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                 <TableCell>{patient.applicationDate}</TableCell>
                 <TableCell>{patient.assignedTo}</TableCell>
                 <TableCell>{patient.status}</TableCell>
-                <TableCell>
+                <TableCell
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                  }}
+                >
                   <button>View</button>
                   <button>Attachment</button>
                   <button onClick={() => openEditModal(patient)}>Edit</button>

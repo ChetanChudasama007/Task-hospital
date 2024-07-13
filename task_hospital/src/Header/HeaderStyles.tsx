@@ -20,3 +20,42 @@ export const HeaderTitle = styled.h1`
   margin: 0;
   font-size: 24px;
 `;
+
+export const PopoverContainer = styled.div<{ visible: boolean }>`
+  position: absolute;
+  top: 40px;
+  right: 30px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: ${(props) => (props.visible ? "block" : "none")};
+`;
+
+export const PopoverItem = styled.div`
+  padding: 10px 20px;
+  cursor: pointer;
+  color: black;
+  &:hover {
+    background: #f0f0f0;
+  }
+`;
+
+export const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 40px;
+  gap: 25px;
+  position: relative;
+`;
+
+export const IconWithDropdown = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  span {
+    margin-left: 5px;
+    font-size: 15px;
+  }
+`;

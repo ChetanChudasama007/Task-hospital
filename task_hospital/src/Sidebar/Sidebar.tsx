@@ -2,7 +2,15 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import {
+  faGauge,
+  faUserPlus,
+  faUsers,
+  faNotesMedical,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// Styled components
 const SidebarContainer = styled.div<{ isOpen: boolean }>`
   width: ${(props) => (props.isOpen ? "250px" : "60px")};
   transition: width 0.3s;
@@ -27,30 +35,31 @@ const ToggleButton = styled.button`
   margin: 10px 0;
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ isOpen: boolean }>`
   padding: 15px;
   width: 100%;
   text-align: left;
-  padding-left: ${(props: any) => (props.isOpen ? "20px" : "10px")};
+  padding-left: ${(props) => (props.isOpen ? "20px" : "10px")};
   display: flex;
-  align-item: center;
+  align-items: center;
   justify-content: center;
   &:hover {
     color: #1abc9c;
     cursor: pointer;
-    padding-left: 0px;
-    padding-right: 0px;
   }
+`;
+
+const MenuItemText = styled.span<{ isOpen: boolean }>`
+  padding-left: ${(props) => (props.isOpen ? "10px" : "0px")};
 `;
 
 const Dropdown = styled.div<{ isOpen: boolean }>`
   display: ${(props) => (props.isOpen ? "block" : "none")};
-  padding-left: ${(props) => (props.isOpen ? "20px" : "10px")};
+  padding-left: 20px;
 `;
 
 const DropdownItem = styled.div`
   padding: 10px 0;
-  padding-left: 20px;
   &:hover {
     color: #1abc9c;
     cursor: pointer;
@@ -65,6 +74,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const [isPatientsDropdownOpen, setIsPatientsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
   const togglePatientsDropdown = () => {
     setIsPatientsDropdownOpen(!isPatientsDropdownOpen);
   };
@@ -72,22 +82,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   return (
     <SidebarContainer isOpen={isOpen}>
       <ToggleButton onClick={toggleSidebar}>{isOpen ? "<" : ">"}</ToggleButton>
-      <MenuItem onClick={togglePatientsDropdown}>
-        <span style={{ paddingRight: "10px" }}> Patients</span>
+      <MenuItem isOpen={isOpen} onClick={togglePatientsDropdown}>
+        <FontAwesomeIcon icon={faUsers} fontSize={20} />
+        <MenuItemText isOpen={isOpen}>Patients</MenuItemText>
         {isOpen && (isPatientsDropdownOpen ? "▲" : "▼")}
       </MenuItem>
       <Dropdown isOpen={isPatientsDropdownOpen && isOpen}>
-        <DropdownItem>New Patient</DropdownItem>
+        <DropdownItem>
+          <FontAwesomeIcon icon={faUserPlus} fontSize={20} />
+          <MenuItemText isOpen={true}>New Patient</MenuItemText>
+        </DropdownItem>
         <DropdownItem onClick={() => navigate("/patient-list")}>
-          Patient List
+          <FontAwesomeIcon icon={faNotesMedical} fontSize={20} />
+          <MenuItemText isOpen={true}>Patient List</MenuItemText>
         </DropdownItem>
       </Dropdown>
-      <MenuItem>Dashboard</MenuItem>
-      <MenuItem>Scheduling</MenuItem>
-      <MenuItem>Medications</MenuItem>
-      <MenuItem>Labs</MenuItem>
-      <MenuItem>Imagings</MenuItem>
-      <MenuItem>Incidents</MenuItem>
+      <MenuItem isOpen={isOpen}>
+        <FontAwesomeIcon icon={faGauge} fontSize={20} />
+        <MenuItemText isOpen={isOpen}>Dashboard</MenuItemText>
+      </MenuItem>
+      <MenuItem isOpen={isOpen}>Scheduling</MenuItem>
+      <MenuItem isOpen={isOpen}>Medications</MenuItem>
+      <MenuItem isOpen={isOpen}>Labs</MenuItem>
+      <MenuItem isOpen={isOpen}>Imagings</MenuItem>
+      <MenuItem isOpen={isOpen}>Incidents</MenuItem>
     </SidebarContainer>
   );
 };
