@@ -50,7 +50,7 @@ const Button = styled.button`
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode; // Add this line
+  children: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
@@ -60,10 +60,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <ModalOverlay>
       <ModalContent>
         <ModalHeader>
-          <h2>New Patient</h2>
+          {/* <h2>New Patient</h2>
           <button onClick={onClose} style={{ fontSize: "20px" }}>
             &times;
-          </button>
+          </button> */}
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>

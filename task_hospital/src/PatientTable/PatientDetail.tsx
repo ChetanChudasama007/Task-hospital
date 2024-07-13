@@ -30,9 +30,11 @@ interface SampleTableProps {
 const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
   const dispatch = useDispatch();
   const patients = useSelector((state: RootState) => state.patients.patients);
+  console.log("patients==>", patients);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
 
   // State for the modal form inputs
   const [clientName, setClientName] = useState("");
@@ -105,6 +107,26 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
     }
   };
 
+  const handleViewClick = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const handleDownload = (file: File) => {
+    const fileURL = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = fileURL;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <HeaderContainer>
@@ -121,7 +143,7 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
               <TableHeaderCell>Appt. Date</TableHeaderCell>
               <TableHeaderCell>Assigned to</TableHeaderCell>
               <TableHeaderCell>Status</TableHeaderCell>
-              <TableHeaderCell>View</TableHeaderCell>
+              <TableHeaderCell>Actions</TableHeaderCell>
             </tr>
           </TableHead>
           <TableBody>
@@ -139,8 +161,10 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
                     justifyContent: "space-around",
                   }}
                 >
-                  <button>View</button>
-                  <button>Attachment</button>
+                  <button onClick={() => handleViewClick(patient)}>View</button>
+                  <button onClick={() => handleDownload(patient.file)}>
+                    Attachment
+                  </button>
                   <button onClick={() => openEditModal(patient)}>Edit</button>
                 </TableCell>
               </tr>
@@ -204,8 +228,46 @@ const SampleTable: React.FC<SampleTableProps> = ({ onAddPatient }) => {
           </form>
         </Modal>
       )}
-      {selectedPatient && (
+      {selectedPatient && isEditModalOpen && (
         <EditModal patient={selectedPatient} onClose={handleCloseEditModal} />
+      )}
+      {selectedPatient && viewModalOpen && (
+        <Modal isOpen={viewModalOpen} onClose={handleCloseViewModal}>
+          <div>
+            <p>
+              <strong>Client Name:</strong> {selectedPatient?.clientName}
+            </p>
+            <p>
+              <strong>Job Type:</strong> {selectedPatient?.jobType}
+            </p>
+            <p>
+              <strong>Application Date:</strong>{" "}
+              {selectedPatient?.applicationDate}
+            </p>
+            <p>
+              <strong>Assigned To:</strong> {selectedPatient?.assignedTo}
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedPatient?.status}
+            </p>
+            {selectedPatient?.file && (
+              <p>
+                <strong>File:</strong>{" "}
+                <a
+                  href={URL.createObjectURL(selectedPatient?.file)}
+                  download={selectedPatient?.file?.name}
+                >
+                  {selectedPatient?.file?.name}
+                </a>
+              </p>
+            )}
+            <div
+              style={{ display: "flex", width: "100%", justifyContent: "end" }}
+            >
+              <CancelButton onClick={handleCloseViewModal}>Cancel</CancelButton>
+            </div>
+          </div>
+        </Modal>
       )}
     </>
   );
