@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Container,
+  // Container,
   LoginForm,
   Title,
   Input,
   Button,
   ErrorMessage,
 } from "./LoginPageStyles";
+import styled from "@emotion/styled";
+import BgImage from "./wallpaper.jpg";
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background: url(${BgImage}) no-repeat center center;
+  background-size: cover;
+  background-position: center;
+`;
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");

@@ -1,16 +1,5 @@
 import styled from "@emotion/styled";
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background-image: url("./wallpaper.jpg");
-  background-size: cover;
-`;
-
 export const LoginForm = styled.div`
   background: white;
   padding: 20px;
